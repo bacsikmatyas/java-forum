@@ -1,12 +1,14 @@
 package dev.bacsikm.javaforum.web.post.RO;
 
+import dev.bacsikm.javaforum.web.user.RO.UserRO;
+
 import java.time.LocalDateTime;
 
 public class PostRO {
     private Long id;
     private String title;
     private String content;
-    private String author;
+    private UserRO author;
     private LocalDateTime publishedOn;
     private LocalDateTime updatedOn;
 
@@ -34,11 +36,11 @@ public class PostRO {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public UserRO getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(UserRO author) {
         this.author = author;
     }
 

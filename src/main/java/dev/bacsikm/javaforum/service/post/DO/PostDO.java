@@ -1,12 +1,14 @@
 package dev.bacsikm.javaforum.service.post.DO;
 
+import dev.bacsikm.javaforum.service.user.DO.UserDO;
+
 import java.time.LocalDateTime;
 
 public class PostDO {
     private Long id;
     private String title;
     private String content;
-    private String author;
+    private UserDO author;
     private LocalDateTime publishedOn;
     private LocalDateTime updatedOn;
 
@@ -34,11 +36,11 @@ public class PostDO {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public UserDO getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(UserDO author) {
         this.author = author;
     }
 

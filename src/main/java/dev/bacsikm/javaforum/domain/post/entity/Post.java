@@ -1,9 +1,7 @@
 package dev.bacsikm.javaforum.domain.post.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import dev.bacsikm.javaforum.domain.user.entity.User;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +13,20 @@ public class Post {
     private Long id;
     private String title;
     private String content;
-    private String author;
     private LocalDateTime publishedOn;
     private LocalDateTime updatedOn;
+
+    @ManyToOne
+    private User author;
 
     public Post() {
     }
 
-    public Post(String title, String content, String author) {
+    public Post(String title, String content, User author) {
         this.title = title;
         this.content = content;
-        this.author = author;
         this.publishedOn = LocalDateTime.now();
+        this.author = author;
     }
 
     public Long getId() {
@@ -53,11 +53,11 @@ public class Post {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 

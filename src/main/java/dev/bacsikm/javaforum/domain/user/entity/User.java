@@ -1,18 +1,24 @@
 package dev.bacsikm.javaforum.domain.user.entity;
 
+import dev.bacsikm.javaforum.domain.post.entity.Post;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+
+import java.util.List;
 
 @Entity
-@Table(name = "users")
 public class User {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     private String username;
     private String password;
     private String roles;
+
+    @OneToMany
+    private List<Post> posts;
 
     public User() {
     }
