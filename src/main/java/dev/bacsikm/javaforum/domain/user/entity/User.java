@@ -1,10 +1,7 @@
 package dev.bacsikm.javaforum.domain.user.entity;
 
 import dev.bacsikm.javaforum.domain.post.entity.Post;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -17,7 +14,7 @@ public class User {
     private String password;
     private String roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "author")
     private List<Post> posts;
 
     public User() {
@@ -59,6 +56,14 @@ public class User {
 
     public void setRoles(String roles) {
         this.roles = roles;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     @Override

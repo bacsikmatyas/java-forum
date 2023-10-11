@@ -16,7 +16,7 @@ public class Post {
     private LocalDateTime publishedOn;
     private LocalDateTime updatedOn;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User author;
 
     public Post() {
@@ -75,17 +75,5 @@ public class Post {
 
     public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
-    }
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", author='" + author + '\'' +
-                ", publishedOn=" + publishedOn +
-                ", updatedOn=" + updatedOn +
-                '}';
     }
 }
