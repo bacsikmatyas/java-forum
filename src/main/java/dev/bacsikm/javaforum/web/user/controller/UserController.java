@@ -1,7 +1,6 @@
 package dev.bacsikm.javaforum.web.user.controller;
 
-import dev.bacsikm.javaforum.service.user.DO.AdditionalUserInfo;
-import dev.bacsikm.javaforum.service.user.DO.UserDO;
+import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import dev.bacsikm.javaforum.service.user.service.UserEntityService;
 import dev.bacsikm.javaforum.web.user.RO.UserInfoRO;
 import dev.bacsikm.javaforum.web.user.transformer.UserROTransformer;
@@ -27,8 +26,7 @@ public class UserController {
 
     @GetMapping("/get/{id}")
     UserInfoRO getUserInfo(@PathVariable Long id) {
-        UserDO user = userEntityService.getUser(id);
-        AdditionalUserInfo additionalUserIno = userEntityService.getAdditionalUserIno(id);
-        return userROTransformer.from(user, additionalUserIno);
+        UserInfoDO userInfo = userEntityService.getUserInfo(id);
+        return userROTransformer.from(userInfo);
     }
 }

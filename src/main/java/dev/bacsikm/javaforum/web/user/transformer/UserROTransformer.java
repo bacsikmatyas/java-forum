@@ -1,7 +1,7 @@
 package dev.bacsikm.javaforum.web.user.transformer;
 
-import dev.bacsikm.javaforum.service.user.DO.AdditionalUserInfo;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
+import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import dev.bacsikm.javaforum.web.user.RO.UserInfoRO;
 import dev.bacsikm.javaforum.web.user.RO.UserRO;
 import org.springframework.stereotype.Component;
@@ -29,15 +29,13 @@ public class UserROTransformer {
         return userRO;
     }
 
-    public UserInfoRO from(UserDO userDO, AdditionalUserInfo additionalUserInfo) {
+    public UserInfoRO from(UserInfoDO userInfoDO) {
         UserInfoRO userInfoRO = new UserInfoRO();
 
-        userInfoRO.setId(userDO.getId());
-        userInfoRO.setRoles(userDO.getRoles());
-        userInfoRO.setUsername(userDO.getUsername());
-
-        userInfoRO.setNumberOfComments(additionalUserInfo.getNumberOfComments());
-        userInfoRO.setNumberOfPosts(additionalUserInfo.getNumberOfPosts());
+        userInfoRO.setId(userInfoDO.getId());
+        userInfoRO.setRoles(userInfoDO.getRoles());
+        userInfoRO.setUsername(userInfoDO.getUsername());
+        userInfoRO.setNumberOfPosts(userInfoDO.getNumberOfPosts());
 
         return userInfoRO;
     }

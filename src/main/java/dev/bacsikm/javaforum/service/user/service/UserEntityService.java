@@ -1,15 +1,12 @@
 package dev.bacsikm.javaforum.service.user.service;
 
-import dev.bacsikm.javaforum.domain.user.entity.User;
+import dev.bacsikm.javaforum.domain.user.projection.UserInfoProjection;
 import dev.bacsikm.javaforum.domain.user.repository.UserRepository;
-import dev.bacsikm.javaforum.service.user.DO.AdditionalUserInfo;
-import dev.bacsikm.javaforum.service.user.DO.UserDO;
-import dev.bacsikm.javaforum.service.user.exception.UserNotFoundException;
+import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import dev.bacsikm.javaforum.service.user.transformer.UserDOTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 public class UserEntityService implements UserService {
@@ -25,20 +22,9 @@ public class UserEntityService implements UserService {
     }
 
     @Override
-    public AdditionalUserInfo getAdditionalUserIno(long id) {
-        AdditionalUserInfo additionalUserInfo = new AdditionalUserInfo();
-        additionalUserInfo.setNumberOfComments(getNumberOfComments(id));
-        additionalUserInfo.setNumberOfPosts(getNumberOfPosts(id));
-        return additionalUserInfo;
-    }
-
-    private long getNumberOfPosts(long id) {
-        return userRepository.countPosts(id);
-    }
-
-    //TODO comment feature
-    private long getNumberOfComments(long id) {
-        return 0;
+    public UserInfoDO getUserInfo(long id) {
+        UserInfoProjection userInfoProjection = userRepository.findUserInfoById(id);
+        return userDOTransformer.from(userInfoProjection);
     }
 
     @Override

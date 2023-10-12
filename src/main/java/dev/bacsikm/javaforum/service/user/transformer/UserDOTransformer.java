@@ -1,7 +1,9 @@
 package dev.bacsikm.javaforum.service.user.transformer;
 
 import dev.bacsikm.javaforum.domain.user.entity.User;
+import dev.bacsikm.javaforum.domain.user.projection.UserInfoProjection;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
+import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,4 +31,14 @@ public class UserDOTransformer {
         return userDO;
     }
 
+    public UserInfoDO from(UserInfoProjection userInfoProjection) {
+        UserInfoDO userInfoDO = new UserInfoDO();
+
+        userInfoDO.setId(userInfoProjection.getId());
+        userInfoDO.setRoles(userInfoProjection.getRoles());
+        userInfoDO.setUsername(userInfoProjection.getUsername());
+        userInfoDO.setNumberOfPosts(userInfoProjection.getPostCount());
+
+        return userInfoDO;
+    }
 }

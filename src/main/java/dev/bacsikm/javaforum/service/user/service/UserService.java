@@ -1,11 +1,9 @@
 package dev.bacsikm.javaforum.service.user.service;
 
-import dev.bacsikm.javaforum.service.user.DO.AdditionalUserInfo;
-import dev.bacsikm.javaforum.service.user.DO.UserDO;
+import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 
 public interface UserService {
 
-    AdditionalUserInfo getAdditionalUserIno(long id);
+    UserInfoDO getUserInfo(long id);
 
-    UserDO getUser(long id);
 }
