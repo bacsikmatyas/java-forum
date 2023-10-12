@@ -7,11 +7,11 @@ import dev.bacsikm.javaforum.service.user.transformer.UserDOTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 @Service
 public class UserEntityService implements UserService {
 
-    public static final String USER_WITH_ID_NOT_FOUND = "User with id: %d not found!";
     private final UserRepository userRepository;
     private final UserDOTransformer userDOTransformer;
 
@@ -28,9 +28,8 @@ public class UserEntityService implements UserService {
     }
 
     @Override
-    public UserDO getUser(long id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        User user = userOptional.orElseThrow(() -> new UserNotFoundException(String.format(USER_WITH_ID_NOT_FOUND, id)));
-        return userDOTransformer.from(user);
+    public List<UserInfoDO> getAllUserInfo() {
+        List<UserInfoProjection> allUserInfo = userRepository.findAllUserInfo();
+        return userDOTransformer.fromList(allUserInfo);
     }
 }

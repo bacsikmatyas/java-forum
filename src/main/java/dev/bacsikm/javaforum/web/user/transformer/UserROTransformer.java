@@ -6,6 +6,8 @@ import dev.bacsikm.javaforum.web.user.RO.UserInfoRO;
 import dev.bacsikm.javaforum.web.user.RO.UserRO;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserROTransformer {
 
@@ -38,5 +40,9 @@ public class UserROTransformer {
         userInfoRO.setNumberOfPosts(userInfoDO.getNumberOfPosts());
 
         return userInfoRO;
+    }
+
+    public List<UserInfoRO> from(List<UserInfoDO> userInfoDOs) {
+        return userInfoDOs.stream().map(this::from).toList();
     }
 }

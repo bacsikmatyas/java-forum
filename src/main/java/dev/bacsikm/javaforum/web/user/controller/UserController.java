@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -22,6 +24,12 @@ public class UserController {
     public UserController(UserEntityService userEntityService, UserROTransformer userROTransformer) {
         this.userEntityService = userEntityService;
         this.userROTransformer = userROTransformer;
+    }
+
+    @GetMapping("/get")
+    List<UserInfoRO> getAllUserInfo() {
+        List<UserInfoDO> allUserInfo = userEntityService.getAllUserInfo();
+        return userROTransformer.from(allUserInfo);
     }
 
     @GetMapping("/get/{id}")

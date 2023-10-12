@@ -6,6 +6,8 @@ import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserDOTransformer {
 
@@ -41,4 +43,9 @@ public class UserDOTransformer {
 
         return userInfoDO;
     }
+
+    public List<UserInfoDO> fromList(List<UserInfoProjection> userInfoProjections) {
+        return userInfoProjections.stream().map(this::from).toList();
+    }
+
 }
