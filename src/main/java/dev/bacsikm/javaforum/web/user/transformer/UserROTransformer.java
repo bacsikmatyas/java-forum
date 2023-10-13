@@ -15,8 +15,9 @@ public class UserROTransformer {
         UserDO userDO = new UserDO();
 
         userDO.setId(userRO.getId());
-        userDO.setRoles(userRO.getRoles());
         userDO.setUsername(userRO.getUsername());
+        userDO.setPassword(userRO.getPassword());
+        userDO.setRoles(userRO.getRoles());
 
         return userDO;
     }
@@ -25,8 +26,9 @@ public class UserROTransformer {
         UserRO userRO = new UserRO();
 
         userRO.setId(userDO.getId());
-        userRO.setRoles(userDO.getRoles());
         userRO.setUsername(userDO.getUsername());
+        userDO.setPassword("--------");
+        userRO.setRoles(userDO.getRoles());
 
         return userRO;
     }
