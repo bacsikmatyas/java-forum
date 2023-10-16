@@ -41,4 +41,9 @@ public class UserController {
         UserDO userDO = userROTransformer.to(newUser);
         return userROTransformer.from(userEntityService.registerUser(userDO));
     }
+
+    @DeleteMapping("api/user/delete/{id}")
+    void deleteUser(@PathVariable Long id) {
+        userEntityService.deleteUser(id);
+    }
 }

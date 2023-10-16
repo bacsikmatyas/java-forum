@@ -11,4 +11,6 @@ public interface UserService {
     List<UserInfoDO> getAllUserInfo();
 
     UserDO registerUser(UserDO userDO);
+
+    void deleteUser(long id);
 }

@@ -10,14 +10,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 60)
     private String username;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String password;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(255) default 'ROLE_USER'")
     private String roles;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Post> posts;
 
     public User() {

@@ -45,4 +45,9 @@ public class UserEntityService implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userDOTransformer.from(userRepository.save(user));
     }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+    }
 }
