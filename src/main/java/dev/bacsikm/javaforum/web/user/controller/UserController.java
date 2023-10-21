@@ -9,6 +9,7 @@ import dev.bacsikm.javaforum.web.user.transformer.UserROTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -45,5 +46,12 @@ public class UserController {
     @DeleteMapping("api/user/delete/{id}")
     void deleteUser(@PathVariable Long id) {
         userEntityService.deleteUser(id);
+    }
+
+    @PutMapping("api/user/update")
+    UserRO updateUser(Principal principal, @RequestBody UserRO userRO) {
+        userEntityService.checkIdentityMatch(principal.getName(), userRO.getId());
+        UserDO userDO = userROTransformer.to(userRO);
+        return userROTransformer.from(userEntityService.updateUser(userDO));
     }
 }

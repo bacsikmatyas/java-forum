@@ -13,4 +13,8 @@ public interface UserService {
     UserDO registerUser(UserDO userDO);
 
     void deleteUser(long id);
+
+    UserDO updateUser(UserDO userDO);
+
+    void checkIdentityMatch(String name, long id);
 }
