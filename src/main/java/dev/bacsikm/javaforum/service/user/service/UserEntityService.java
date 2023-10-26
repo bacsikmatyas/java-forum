@@ -8,6 +8,8 @@ import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import dev.bacsikm.javaforum.service.user.exception.IdentityMismatchException;
 import dev.bacsikm.javaforum.service.user.exception.UserNotFoundException;
 import dev.bacsikm.javaforum.service.user.transformer.UserDOTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,8 @@ public class UserEntityService implements UserService {
 
     private final UserRepository userRepository;
     private final UserDOTransformer userDOTransformer;
-
     private final PasswordEncoder passwordEncoder;
+    Logger logger = LoggerFactory.getLogger(UserEntityService.class);
 
     @Autowired
     public UserEntityService(UserRepository userRepository, UserDOTransformer userDOTransformer, PasswordEncoder passwordEncoder) {
@@ -32,12 +34,14 @@ public class UserEntityService implements UserService {
     @Override
     public UserInfoDO getUserInfo(long id) {
         UserInfoProjection userInfoProjection = userRepository.findUserInfoById(id);
+        logger.info("Found user with id {}", id);
         return userDOTransformer.from(userInfoProjection);
     }
 
     @Override
     public List<UserInfoDO> getAllUserInfo() {
         List<UserInfoProjection> allUserInfo = userRepository.findAllUserInfo();
+        logger.info("Found {} users", allUserInfo.size());
         return userDOTransformer.fromList(allUserInfo);
     }
 
@@ -45,28 +49,37 @@ public class UserEntityService implements UserService {
     public UserDO registerUser(UserDO userDO) {
         User user = userDOTransformer.to(userDO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userDOTransformer.from(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+        logger.info("Created user with id {}", savedUser.getId());
+        return userDOTransformer.from(savedUser);
     }
 
     @Override
     public void deleteUser(long id) {
         userRepository.deleteById(id);
+        logger.info("Deleted user with id {}", id);
     }
 
     @Override
     public UserDO updateUser(UserDO userDO) {
-        if (userRepository.existsById(userDO.getId())) {
-            User user = userDOTransformer.to(userDO);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userDOTransformer.from(userRepository.save(user));
-        }
-        else {
-            throw new UserNotFoundException("User with id " + userDO.getId() + " does not exist");
+        checkIfUserExists(userDO.getId());
+        User user = userDOTransformer.to(userDO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User updatedUser = userRepository.save(user);
+        logger.info("Updated user with id {}", updatedUser.getId());
+        return userDOTransformer.from(updatedUser);
+    }
+
+    private void checkIfUserExists(long id) {
+        logger.info("Checking if user with id {} exists", id);
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("User with id " + id + " does not exist");
         }
     }
 
     @Override
     public void checkIdentityMatch(String name, long id) {
+        logger.info("Checking if user with id {} is the same as user with name {}", id, name);
         if (!userRepository.existsByUsernameAndId(name, id)) {
             throw new IdentityMismatchException("User with id " + id + " trying to modify user with name: " + name);
         }
