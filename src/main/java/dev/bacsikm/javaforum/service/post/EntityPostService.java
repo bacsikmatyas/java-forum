@@ -37,8 +37,8 @@ public class EntityPostService implements PostService {
     }
 
     @Override
-    public PostDO getPostById(Long id) {
-        Post post = postRepository.findById(id).orElseThrow();
+    public PostDO getPostById(long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
         logger.info("Found post with id {}", id);
         return postTransformer.from(post);
     }

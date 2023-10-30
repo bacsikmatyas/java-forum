@@ -7,7 +7,7 @@ import java.util.List;
 public interface PostService {
     List<PostDO> getAllPost();
 
-    PostDO getPostById(Long id);
+    PostDO getPostById(long id);
 
     PostDO createPost(PostDO postDO);
 
