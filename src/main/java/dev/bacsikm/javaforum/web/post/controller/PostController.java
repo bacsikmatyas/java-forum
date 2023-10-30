@@ -61,4 +61,11 @@ public class PostController {
         PostDO postDO = postRequestTransformer.to(updatePostRequest);
         return postResponseTransformer.from(postService.updatePost(postDO));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public void deletePost(Principal principal, @PathVariable long id) {
+        logger.info("Deleting post with id {}", id);
+        postService.checkAuthorForExisting(id, principal.getName());
+        postService.deletePost(id);
+    }
 }

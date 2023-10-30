@@ -16,4 +16,6 @@ public interface PostService {
     void checkAuthorForNew(String username, String principal);
 
     void checkAuthorForExisting(long id, String author);
+
+    void deletePost(long id);
 }

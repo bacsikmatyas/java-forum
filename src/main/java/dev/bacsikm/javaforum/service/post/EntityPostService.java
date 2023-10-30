@@ -80,6 +80,13 @@ public class EntityPostService implements PostService {
         }
     }
 
+    @Override
+    public void deletePost(long id) {
+        checkIfPostExists(id);
+        postRepository.deleteById(id);
+        logger.info("Deleted post with id {}", id);
+    }
+
     private void checkIfPostExists(long id) {
         logger.info("Checking if post with id {} exists", id);
         if (!postRepository.existsById(id)) {
