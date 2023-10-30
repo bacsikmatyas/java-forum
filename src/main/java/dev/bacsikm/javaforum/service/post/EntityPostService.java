@@ -5,6 +5,7 @@ import dev.bacsikm.javaforum.domain.post.repository.PostRepository;
 import dev.bacsikm.javaforum.domain.user.repository.UserRepository;
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
 import dev.bacsikm.javaforum.service.post.exception.AuthorMismatchException;
+import dev.bacsikm.javaforum.service.post.exception.PostNotFoundException;
 import dev.bacsikm.javaforum.service.post.transformer.PostDOTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,10 +53,37 @@ public class EntityPostService implements PostService {
     }
 
     @Override
+    public PostDO updatePost(PostDO postDO) {
+        checkIfPostExists(postDO.getId());
+        Post post = postRepository.findById(postDO.getId()).get();
+        post.setTitle(postDO.getTitle());
+        post.setContent(postDO.getContent());
+        post.setUpdatedOn(postDO.getUpdatedOn());
+        Post updatedPost = postRepository.save(post);
+        logger.info("Updated post with id {}", updatedPost.getId());
+        return postTransformer.from(updatedPost);
+    }
+
+    @Override
     public void checkAuthorForNew(String username, String principal) {
         logger.info("Checking if user {} is the author of new post", username);
         if (!username.equals(principal)) {
             throw new AuthorMismatchException(principal);
+        }
+    }
+
+    @Override
+    public void checkAuthorForExisting(long id, String author) {
+        logger.info("Checking if user {} is the author of post with id {}", author, id);
+        if (!postRepository.existsByIdAndAuthorUsername(id, author)) {
+            throw new AuthorMismatchException(id, author);
+        }
+    }
+
+    private void checkIfPostExists(long id) {
+        logger.info("Checking if post with id {} exists", id);
+        if (!postRepository.existsById(id)) {
+            throw new PostNotFoundException(id);
         }
     }
 }

@@ -3,6 +3,7 @@ package dev.bacsikm.javaforum.web.post.transformer;
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.web.post.RO.CreatePostRequest;
+import dev.bacsikm.javaforum.web.post.RO.UpdatePostRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,17 @@ public class PostRequestTransformer {
         author.setUsername(createPostRequest.getAuthor());
         postDO.setAuthor(author);
         postDO.setPublishedOn(LocalDateTime.now());
+        postDO.setUpdatedOn(LocalDateTime.now());
+
+        return postDO;
+    }
+
+    public PostDO to(UpdatePostRequest updatePostRequest) {
+        PostDO postDO = new PostDO();
+
+        postDO.setId(updatePostRequest.getId());
+        postDO.setTitle(updatePostRequest.getTitle());
+        postDO.setContent(updatePostRequest.getContent());
         postDO.setUpdatedOn(LocalDateTime.now());
 
         return postDO;

@@ -4,6 +4,7 @@ import dev.bacsikm.javaforum.service.post.DO.PostDO;
 import dev.bacsikm.javaforum.service.post.PostService;
 import dev.bacsikm.javaforum.web.post.RO.CreatePostRequest;
 import dev.bacsikm.javaforum.web.post.RO.PostResponse;
+import dev.bacsikm.javaforum.web.post.RO.UpdatePostRequest;
 import dev.bacsikm.javaforum.web.post.transformer.PostRequestTransformer;
 import dev.bacsikm.javaforum.web.post.transformer.PostResponseTransformer;
 import org.slf4j.Logger;
@@ -53,4 +54,11 @@ public class PostController {
         return postResponseTransformer.from(postService.createPost(postDO));
     }
 
+    @PutMapping("/update")
+    public PostResponse updatePost(Principal principal, @RequestBody UpdatePostRequest updatePostRequest) {
+        logger.info("Updating post");
+        postService.checkAuthorForExisting(updatePostRequest.getId(), principal.getName());
+        PostDO postDO = postRequestTransformer.to(updatePostRequest);
+        return postResponseTransformer.from(postService.updatePost(postDO));
+    }
 }

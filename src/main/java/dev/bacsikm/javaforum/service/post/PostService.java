@@ -11,5 +11,9 @@ public interface PostService {
 
     PostDO createPost(PostDO postDO);
 
+    PostDO updatePost(PostDO postDO);
+
     void checkAuthorForNew(String username, String principal);
+
+    void checkAuthorForExisting(long id, String author);
 }

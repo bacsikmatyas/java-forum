@@ -1,6 +1,7 @@
 package dev.bacsikm.javaforum.web.exception;
 
 import dev.bacsikm.javaforum.service.post.exception.AuthorMismatchException;
+import dev.bacsikm.javaforum.service.post.exception.PostNotFoundException;
 import dev.bacsikm.javaforum.service.user.exception.IdentityMismatchException;
 import dev.bacsikm.javaforum.service.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
@@ -34,6 +35,13 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
         logger.error("User not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<String> handlePostNotFound(PostNotFoundException ex) {
+        logger.error("Post not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
