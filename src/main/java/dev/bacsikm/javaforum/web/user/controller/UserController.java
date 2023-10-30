@@ -57,6 +57,7 @@ public class UserController {
 
     @PutMapping("api/user/update")
     UserRO updateUser(Principal principal, @RequestBody UserRO userRO) {
+        logger.info("Updating user");
         userEntityService.checkIdentityMatch(principal.getName(), userRO.getId());
         UserDO userDO = userROTransformer.to(userRO);
         return userROTransformer.from(userEntityService.updateUser(userDO));
