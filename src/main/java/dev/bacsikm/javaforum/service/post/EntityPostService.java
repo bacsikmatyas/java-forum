@@ -2,7 +2,9 @@ package dev.bacsikm.javaforum.service.post;
 
 import dev.bacsikm.javaforum.domain.post.entity.Post;
 import dev.bacsikm.javaforum.domain.post.repository.PostRepository;
+import dev.bacsikm.javaforum.domain.user.repository.UserRepository;
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
+import dev.bacsikm.javaforum.service.post.exception.AuthorMismatchException;
 import dev.bacsikm.javaforum.service.post.transformer.PostDOTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +18,14 @@ public class EntityPostService implements PostService {
 
     private final PostRepository postRepository;
     private final PostDOTransformer postTransformer;
+    private final UserRepository userRepository;
     Logger logger = LoggerFactory.getLogger(EntityPostService.class);
 
     @Autowired
-    public EntityPostService(PostRepository postRepository, PostDOTransformer postTransformer) {
+    public EntityPostService(PostRepository postRepository, PostDOTransformer postTransformer, UserRepository userRepository) {
         this.postRepository = postRepository;
         this.postTransformer = postTransformer;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -36,5 +40,22 @@ public class EntityPostService implements PostService {
         Post post = postRepository.findById(id).orElseThrow();
         logger.info("Found post with id {}", id);
         return postTransformer.from(post);
+    }
+
+    @Override
+    public PostDO createPost(PostDO postDO) {
+        Post post = postTransformer.to(postDO);
+        userRepository.findByUsername(post.getAuthor().getUsername()).ifPresent(post::setAuthor);
+        Post savedPost = postRepository.save(post);
+        logger.info("Created post with id {}", savedPost.getId());
+        return postTransformer.from(savedPost);
+    }
+
+    @Override
+    public void checkAuthorForNew(String username, String principal) {
+        logger.info("Checking if user {} is the author of new post", username);
+        if (!username.equals(principal)) {
+            throw new AuthorMismatchException(principal);
+        }
     }
 }

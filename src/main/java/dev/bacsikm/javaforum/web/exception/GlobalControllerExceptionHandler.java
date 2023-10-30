@@ -1,5 +1,6 @@
 package dev.bacsikm.javaforum.web.exception;
 
+import dev.bacsikm.javaforum.service.post.exception.AuthorMismatchException;
 import dev.bacsikm.javaforum.service.user.exception.IdentityMismatchException;
 import dev.bacsikm.javaforum.service.user.exception.UserNotFoundException;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class GlobalControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
         logger.error("Something went wrong: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong. " + ex);
     }
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
@@ -34,5 +35,12 @@ public class GlobalControllerExceptionHandler {
     public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
         logger.error("User not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(AuthorMismatchException.class)
+    public ResponseEntity<String> handleAuthorMismatch(AuthorMismatchException ex) {
+        logger.error("Author mismatch: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getMessage());
     }
 }
