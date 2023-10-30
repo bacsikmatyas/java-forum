@@ -7,5 +7,15 @@ import java.util.List;
 public interface PostService {
     List<PostDO> getAllPost();
 
-    PostDO getPostById(Long id);
+    PostDO getPostById(long id);
+
+    PostDO createPost(PostDO postDO);
+
+    PostDO updatePost(PostDO postDO);
+
+    void checkAuthorForNew(String username, String principal);
+
+    void checkAuthorForExisting(long id, String author);
+
+    void deletePost(long id);
 }
