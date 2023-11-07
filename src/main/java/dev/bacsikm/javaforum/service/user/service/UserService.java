@@ -1,6 +1,7 @@
 package dev.bacsikm.javaforum.service.user.service;
 
 import dev.bacsikm.javaforum.service.user.DO.RegisterUserDO;
+import dev.bacsikm.javaforum.service.user.DO.UpdateUserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 
@@ -15,7 +16,7 @@ public interface UserService {
 
     void deleteUser(long id);
 
-    UserDO updateUser(UserDO userDO);
+    UserDO updateUser(UpdateUserDO updateUserDO);
 
     void checkIdentityMatch(String name, long id);
 }

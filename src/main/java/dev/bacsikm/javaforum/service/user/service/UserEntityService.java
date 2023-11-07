@@ -4,6 +4,7 @@ import dev.bacsikm.javaforum.domain.user.entity.User;
 import dev.bacsikm.javaforum.domain.user.projection.UserInfoProjection;
 import dev.bacsikm.javaforum.domain.user.repository.UserRepository;
 import dev.bacsikm.javaforum.service.user.DO.RegisterUserDO;
+import dev.bacsikm.javaforum.service.user.DO.UpdateUserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import dev.bacsikm.javaforum.service.user.exception.IdentityMismatchException;
@@ -57,20 +58,20 @@ public class UserEntityService implements UserService {
     }
 
     @Override
-    public UserDO updateUser(UserDO userDO) {
-        checkIfUserExists(userDO.getId());
-        User user = userDOTransformer.to(userDO);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public UserDO updateUser(UpdateUserDO updateUserDO) {
+        User user = getUserIfExists(updateUserDO.getId());
+
+        user.setUsername(updateUserDO.getUsername());
+        user.setPassword(updateUserDO.getPassword());
+
         User updatedUser = userRepository.save(user);
         logger.info("Updated user with id {}", updatedUser.getId());
         return userDOTransformer.from(updatedUser);
     }
 
-    private void checkIfUserExists(long id) {
+    private User getUserIfExists(long id) {
         logger.info("Checking if user with id {} exists", id);
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User with id " + id + " does not exist");
-        }
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id " + id + " does not exist"));
     }
 
     @Override
