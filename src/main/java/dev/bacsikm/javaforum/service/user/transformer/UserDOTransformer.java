@@ -2,14 +2,20 @@ package dev.bacsikm.javaforum.service.user.transformer;
 
 import dev.bacsikm.javaforum.domain.user.entity.User;
 import dev.bacsikm.javaforum.domain.user.projection.UserInfoProjection;
+import dev.bacsikm.javaforum.service.user.DO.RegisterUserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class UserDOTransformer {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public User to(UserDO userDO) {
         User user = new User();
@@ -48,4 +54,13 @@ public class UserDOTransformer {
         return userInfoProjections.stream().map(this::from).toList();
     }
 
+    public User to(RegisterUserDO registerUserDO) {
+        User user = new User();
+
+        user.setUsername(registerUserDO.getUsername());
+        user.setPassword(passwordEncoder.encode(registerUserDO.getPassword()));
+        user.setRoles("USER");
+
+        return user;
+    }
 }

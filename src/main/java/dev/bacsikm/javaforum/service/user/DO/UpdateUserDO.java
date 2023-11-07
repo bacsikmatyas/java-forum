@@ -1,11 +1,10 @@
-package dev.bacsikm.javaforum.web.user.RO;
+package dev.bacsikm.javaforum.service.user.DO;
 
 import lombok.Data;
 
 @Data
-public class UserRO {
+public class UpdateUserDO {
     private long id;
     private String username;
     private String password;
-    private String roles;
 }

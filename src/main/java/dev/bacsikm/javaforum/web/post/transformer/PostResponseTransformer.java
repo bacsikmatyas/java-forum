@@ -2,7 +2,7 @@ package dev.bacsikm.javaforum.web.post.transformer;
 
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
 import dev.bacsikm.javaforum.web.post.RO.PostResponse;
-import dev.bacsikm.javaforum.web.user.transformer.UserROTransformer;
+import dev.bacsikm.javaforum.web.user.transformer.UserResponseTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +12,11 @@ import java.util.List;
 @Component
 public class PostResponseTransformer {
 
-    private final UserROTransformer userROTransformer;
+    private final UserResponseTransformer userResponseTransformer;
 
     @Autowired
-    public PostResponseTransformer(UserROTransformer userROTransformer) {
-        this.userROTransformer = userROTransformer;
+    public PostResponseTransformer(UserResponseTransformer userResponseTransformer) {
+        this.userResponseTransformer = userResponseTransformer;
     }
 
     public PostDO to(PostResponse postResponse) {
@@ -25,7 +25,7 @@ public class PostResponseTransformer {
         postDO.setId(postResponse.getId());
         postDO.setTitle(postResponse.getTitle());
         postDO.setContent(postResponse.getContent());
-        postDO.setAuthor(userROTransformer.to(postResponse.getAuthor()));
+        postDO.setAuthor(userResponseTransformer.to(postResponse.getAuthor()));
         postDO.setPublishedOn(postResponse.getPublishedOn());
         postDO.setUpdatedOn(postResponse.getUpdatedOn());
 
@@ -38,7 +38,7 @@ public class PostResponseTransformer {
         postResponse.setId(postDO.getId());
         postResponse.setTitle(postDO.getTitle());
         postResponse.setContent(postDO.getContent());
-        postResponse.setAuthor(userROTransformer.from(postDO.getAuthor()));
+        postResponse.setAuthor(userResponseTransformer.from(postDO.getAuthor()));
         postResponse.setPublishedOn(postDO.getPublishedOn());
         postResponse.setUpdatedOn(postDO.getUpdatedOn());
 
