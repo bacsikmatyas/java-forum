@@ -1,10 +1,12 @@
 package dev.bacsikm.javaforum.web.user.controller;
 
+import dev.bacsikm.javaforum.service.user.DO.RegisterUserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import dev.bacsikm.javaforum.service.user.service.UserEntityService;
-import dev.bacsikm.javaforum.web.user.RO.UserRO;
+import dev.bacsikm.javaforum.web.user.RO.RegisterUserRequest;
 import dev.bacsikm.javaforum.web.user.RO.UserInfoResponse;
+import dev.bacsikm.javaforum.web.user.RO.UserResponse;
 import dev.bacsikm.javaforum.web.user.transformer.UserRequestTransformer;
 import dev.bacsikm.javaforum.web.user.transformer.UserResponseTransformer;
 import org.slf4j.Logger;
@@ -46,10 +48,11 @@ public class UserController {
     }
 
     @PostMapping("api/public/user/register")
-    UserRO registerUser(@RequestBody UserRO newUser) {
+    UserResponse registerUser(@RequestBody RegisterUserRequest registerUserRequest) {
         logger.info("Registering user");
-        UserDO userDO = userROTransformer.to(newUser);
-        return userROTransformer.from(userEntityService.registerUser(userDO));
+        RegisterUserDO registerUserDO = userRequestTransformer.to(registerUserRequest);
+        return userResponseTransformer.from(userEntityService.registerUser(registerUserDO));
+    }
     }
 
     @DeleteMapping("api/user/delete/{id}")

@@ -3,6 +3,7 @@ package dev.bacsikm.javaforum.service.user.service;
 import dev.bacsikm.javaforum.domain.user.entity.User;
 import dev.bacsikm.javaforum.domain.user.projection.UserInfoProjection;
 import dev.bacsikm.javaforum.domain.user.repository.UserRepository;
+import dev.bacsikm.javaforum.service.user.DO.RegisterUserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
 import dev.bacsikm.javaforum.service.user.exception.IdentityMismatchException;
@@ -11,7 +12,6 @@ import dev.bacsikm.javaforum.service.user.transformer.UserDOTransformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,18 +21,16 @@ public class UserEntityService implements UserService {
 
     private final UserRepository userRepository;
     private final UserDOTransformer userDOTransformer;
-    private final PasswordEncoder passwordEncoder;
     Logger logger = LoggerFactory.getLogger(UserEntityService.class);
 
     @Autowired
-    public UserEntityService(UserRepository userRepository, UserDOTransformer userDOTransformer, PasswordEncoder passwordEncoder) {
+    public UserEntityService(UserRepository userRepository, UserDOTransformer userDOTransformer) {
         this.userRepository = userRepository;
         this.userDOTransformer = userDOTransformer;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public UserInfoDO getUserInfo(long id) {
+    public UserInfoDO getUserInfo(long id) { //TODO: check if user exists
         UserInfoProjection userInfoProjection = userRepository.findUserInfoById(id);
         logger.info("Found user with id {}", id);
         return userDOTransformer.from(userInfoProjection);
@@ -46,10 +44,8 @@ public class UserEntityService implements UserService {
     }
 
     @Override
-    public UserDO registerUser(UserDO userDO) {
-        User user = userDOTransformer.to(userDO);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User savedUser = userRepository.save(user);
+    public UserDO registerUser(RegisterUserDO registerUserDO) {
+        User savedUser = userRepository.save(userDOTransformer.to(registerUserDO));
         logger.info("Created user with id {}", savedUser.getId());
         return userDOTransformer.from(savedUser);
     }
