@@ -1,6 +1,6 @@
 package dev.bacsikm.javaforum.web.post.RO;
 
-import dev.bacsikm.javaforum.web.user.RO.UserRO;
+import dev.bacsikm.javaforum.web.user.RO.UserResponse;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ public class PostResponse {
     private Long id;
     private String title;
     private String content;
-    private UserRO author;
+    private UserResponse author;
     private LocalDateTime publishedOn;
     private LocalDateTime updatedOn;
 }
