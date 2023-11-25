@@ -2,9 +2,8 @@ package dev.bacsikm.javaforum.web.user.controller;
 
 import dev.bacsikm.javaforum.service.user.DO.RegisterUserDO;
 import dev.bacsikm.javaforum.service.user.DO.UpdateUserDO;
-import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.service.user.DO.UserInfoDO;
-import dev.bacsikm.javaforum.service.user.service.UserEntityService;
+import dev.bacsikm.javaforum.service.user.service.UserService;
 import dev.bacsikm.javaforum.web.user.RO.RegisterUserRequest;
 import dev.bacsikm.javaforum.web.user.RO.UpdateUserRequest;
 import dev.bacsikm.javaforum.web.user.RO.UserInfoResponse;
@@ -22,15 +21,15 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private final UserEntityService userEntityService;
+    private final UserService userService;
     private final UserResponseTransformer userResponseTransformer;
     private final UserRequestTransformer userRequestTransformer;
     Logger logger = LoggerFactory.getLogger(UserController.class);
 
 
     @Autowired
-    public UserController(UserEntityService userEntityService, UserResponseTransformer userResponseTransformer, UserRequestTransformer userRequestTransformer) {
-        this.userEntityService = userEntityService;
+    public UserController(UserService userService, UserResponseTransformer userResponseTransformer, UserRequestTransformer userRequestTransformer) {
+        this.userService = userService;
         this.userResponseTransformer = userResponseTransformer;
         this.userRequestTransformer = userRequestTransformer;
     }
@@ -38,14 +37,14 @@ public class UserController {
     @GetMapping("/api/user/get")
     List<UserInfoResponse> getAllUserInfo() {
         logger.info("Getting all users");
-        List<UserInfoDO> allUserInfo = userEntityService.getAllUserInfo();
+        List<UserInfoDO> allUserInfo = userService.getAllUserInfo();
         return userResponseTransformer.from(allUserInfo);
     }
 
     @GetMapping("/api/user/get/{id}")
     UserInfoResponse getUserInfo(@PathVariable Long id) {
         logger.info("Getting user with id {}", id);
-        UserInfoDO userInfo = userEntityService.getUserInfo(id);
+        UserInfoDO userInfo = userService.getUserInfo(id);
         return userResponseTransformer.from(userInfo);
     }
 
@@ -53,20 +52,20 @@ public class UserController {
     UserResponse registerUser(@RequestBody RegisterUserRequest registerUserRequest) {
         logger.info("Registering user");
         RegisterUserDO registerUserDO = userRequestTransformer.to(registerUserRequest);
-        return userResponseTransformer.from(userEntityService.registerUser(registerUserDO));
+        return userResponseTransformer.from(userService.registerUser(registerUserDO));
     }
 
     @PutMapping("api/user/update")
     UserResponse updateUser(Principal principal, @RequestBody UpdateUserRequest updateUserRequest) {
         logger.info("Updating user");
-        userEntityService.checkIdentityMatch(principal.getName(), updateUserRequest.getId());
+        userService.checkIdentityMatch(principal.getName(), updateUserRequest.getId());
         UpdateUserDO updateUserDO = userRequestTransformer.to(updateUserRequest);
-        return userResponseTransformer.from(userEntityService.updateUser(updateUserDO));
+        return userResponseTransformer.from(userService.updateUser(updateUserDO));
     }
 
     @DeleteMapping("api/user/delete/{id}")
     void deleteUser(@PathVariable Long id) {
         logger.info("Deleting user with id {}", id);
-        userEntityService.deleteUser(id);
+        userService.deleteUser(id);
     }
 }

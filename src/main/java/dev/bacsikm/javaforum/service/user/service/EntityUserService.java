@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserEntityService implements UserService {
+public class EntityUserService implements UserService {
 
     private final UserRepository userRepository;
     private final UserDOTransformer userDOTransformer;
-    Logger logger = LoggerFactory.getLogger(UserEntityService.class);
+    Logger logger = LoggerFactory.getLogger(EntityUserService.class);
 
     @Autowired
-    public UserEntityService(UserRepository userRepository, UserDOTransformer userDOTransformer) {
+    public EntityUserService(UserRepository userRepository, UserDOTransformer userDOTransformer) {
         this.userRepository = userRepository;
         this.userDOTransformer = userDOTransformer;
     }
