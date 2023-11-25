@@ -1,6 +1,8 @@
 package dev.bacsikm.javaforum.web.post.controller;
 
+import dev.bacsikm.javaforum.service.post.DO.CreatePostDO;
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
+import dev.bacsikm.javaforum.service.post.DO.UpdatePostDO;
 import dev.bacsikm.javaforum.service.post.PostService;
 import dev.bacsikm.javaforum.web.post.RO.CreatePostRequest;
 import dev.bacsikm.javaforum.web.post.RO.PostResponse;
@@ -50,16 +52,16 @@ public class PostController {
     public PostResponse createPost(Principal principal, @RequestBody CreatePostRequest createPostRequest) {
         logger.info("Creating post");
         postService.checkAuthorForNew(createPostRequest.getAuthor(), principal.getName());
-        PostDO postDO = postRequestTransformer.to(createPostRequest);
-        return postResponseTransformer.from(postService.createPost(postDO));
+        CreatePostDO createPostDO = postRequestTransformer.to(createPostRequest);
+        return postResponseTransformer.from(postService.createPost(createPostDO));
     }
 
     @PutMapping("/update")
     public PostResponse updatePost(Principal principal, @RequestBody UpdatePostRequest updatePostRequest) {
         logger.info("Updating post");
         postService.checkAuthorForExisting(updatePostRequest.getId(), principal.getName());
-        PostDO postDO = postRequestTransformer.to(updatePostRequest);
-        return postResponseTransformer.from(postService.updatePost(postDO));
+        UpdatePostDO updatePostDO = postRequestTransformer.to(updatePostRequest);
+        return postResponseTransformer.from(postService.updatePost(updatePostDO));
     }
 
     @DeleteMapping("/delete/{id}")

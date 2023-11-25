@@ -1,6 +1,8 @@
 package dev.bacsikm.javaforum.web.post.transformer;
 
+import dev.bacsikm.javaforum.service.post.DO.CreatePostDO;
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
+import dev.bacsikm.javaforum.service.post.DO.UpdatePostDO;
 import dev.bacsikm.javaforum.service.user.DO.UserDO;
 import dev.bacsikm.javaforum.web.post.RO.CreatePostRequest;
 import dev.bacsikm.javaforum.web.post.RO.UpdatePostRequest;
@@ -10,28 +12,23 @@ import java.time.LocalDateTime;
 
 @Component
 public class PostRequestTransformer {
-    public PostDO to(CreatePostRequest createPostRequest) {
-        PostDO postDO = new PostDO();
+    public CreatePostDO to(CreatePostRequest createPostRequest) {
+        CreatePostDO createPostDO = new CreatePostDO();
 
-        postDO.setTitle(createPostRequest.getTitle());
-        postDO.setContent(createPostRequest.getContent());
-        UserDO author = new UserDO();
-        author.setUsername(createPostRequest.getAuthor());
-        postDO.setAuthor(author);
-        postDO.setPublishedOn(LocalDateTime.now());
-        postDO.setUpdatedOn(LocalDateTime.now());
+        createPostDO.setTitle(createPostRequest.getTitle());
+        createPostDO.setContent(createPostRequest.getContent());
+        createPostDO.setAuthor(createPostRequest.getAuthor());
 
-        return postDO;
+        return createPostDO;
     }
 
-    public PostDO to(UpdatePostRequest updatePostRequest) {
-        PostDO postDO = new PostDO();
+    public UpdatePostDO to(UpdatePostRequest updatePostRequest) {
+        UpdatePostDO updatePostDO = new UpdatePostDO();
 
-        postDO.setId(updatePostRequest.getId());
-        postDO.setTitle(updatePostRequest.getTitle());
-        postDO.setContent(updatePostRequest.getContent());
-        postDO.setUpdatedOn(LocalDateTime.now());
+        updatePostDO.setId(updatePostRequest.getId());
+        updatePostDO.setTitle(updatePostRequest.getTitle());
+        updatePostDO.setContent(updatePostRequest.getContent());
 
-        return postDO;
+        return updatePostDO;
     }
 }

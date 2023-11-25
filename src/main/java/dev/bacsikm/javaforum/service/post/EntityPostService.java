@@ -3,7 +3,9 @@ package dev.bacsikm.javaforum.service.post;
 import dev.bacsikm.javaforum.domain.post.entity.Post;
 import dev.bacsikm.javaforum.domain.post.repository.PostRepository;
 import dev.bacsikm.javaforum.domain.user.repository.UserRepository;
+import dev.bacsikm.javaforum.service.post.DO.CreatePostDO;
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
+import dev.bacsikm.javaforum.service.post.DO.UpdatePostDO;
 import dev.bacsikm.javaforum.service.post.exception.AuthorMismatchException;
 import dev.bacsikm.javaforum.service.post.exception.PostNotFoundException;
 import dev.bacsikm.javaforum.service.post.transformer.PostDOTransformer;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -44,8 +47,8 @@ public class EntityPostService implements PostService {
     }
 
     @Override
-    public PostDO createPost(PostDO postDO) {
-        Post post = postTransformer.to(postDO);
+    public PostDO createPost(CreatePostDO createPostDO) {
+        Post post = postTransformer.to(createPostDO);
         userRepository.findByUsername(post.getAuthor().getUsername()).ifPresent(post::setAuthor);
         Post savedPost = postRepository.save(post);
         logger.info("Created post with id {}", savedPost.getId());
@@ -53,12 +56,12 @@ public class EntityPostService implements PostService {
     }
 
     @Override
-    public PostDO updatePost(PostDO postDO) {
-        checkIfPostExists(postDO.getId());
-        Post post = postRepository.findById(postDO.getId()).get();
-        post.setTitle(postDO.getTitle());
-        post.setContent(postDO.getContent());
-        post.setUpdatedOn(postDO.getUpdatedOn());
+    public PostDO updatePost(UpdatePostDO updatePostDO) {
+        checkIfPostExists(updatePostDO.getId());
+        Post post = postRepository.findById(updatePostDO.getId()).get();
+        post.setTitle(updatePostDO.getTitle());
+        post.setContent(updatePostDO.getContent());
+        post.setUpdatedOn(LocalDateTime.now());
         Post updatedPost = postRepository.save(post);
         logger.info("Updated post with id {}", updatedPost.getId());
         return postTransformer.from(updatedPost);

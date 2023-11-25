@@ -1,11 +1,13 @@
 package dev.bacsikm.javaforum.service.post.transformer;
 
 import dev.bacsikm.javaforum.domain.post.entity.Post;
+import dev.bacsikm.javaforum.service.post.DO.CreatePostDO;
 import dev.bacsikm.javaforum.service.post.DO.PostDO;
 import dev.bacsikm.javaforum.service.user.transformer.UserDOTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +52,15 @@ public class PostDOTransformer {
         List<PostDO> postDOs = new ArrayList<>();
         posts.forEach((post) -> postDOs.add(from(post)));
         return postDOs;
+    }
+
+    public Post to(CreatePostDO createPostDO) {
+        Post post = new Post();
+
+        post.setTitle(createPostDO.getTitle());
+        post.setContent(createPostDO.getContent());
+        post.setPublishedOn(LocalDateTime.now());
+
+        return post;
     }
 }
